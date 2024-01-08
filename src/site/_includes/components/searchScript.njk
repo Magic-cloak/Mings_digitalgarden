@@ -103,36 +103,46 @@
     }
 
     function createIndex(posts) {
-        const encoder = (str) => str
-            .toLowerCase()
-            .split(/([^a-z]|[^\x00-\x7F])/)
-        const contentIndex = new FlexSearch.Document({
-            cache: true,
-            charset: "latin:extra",
-            optimize: true,
-            index: [
-                {
-                    field: "content",
-                    tokenize: "reverse",
-                    encode: encoder
-                }, {
-                    field: "title",
-                    tokenize: "forward",
-                    encode: encoder
-                }, {
-                    field: "tags",
-                    tokenize: "forward",
-                    encode: encoder
-                }
-            ]
-        })
-        posts.forEach((p, idx) => {
-            contentIndex.add({
-                id: idx, title: p.title, content: p.content, tags: p.tags //Change to removeHTML
-            })
+    // 引入中文分词库
+    const Segment = require('segment');
+    const segment = new Segment();
+
+    const encoder = (str) => {
+        // 使用分词库进行中文分词
+        const tokens = segment.doSegment(str, { simple: true });
+        return tokens;
+    };
+
+    const contentIndex = new FlexSearch.Document({
+        cache: true,
+        charset: "latin:extra",
+        optimize: true,
+        index: [
+            {
+                field: "content",
+                tokenize: "reverse",
+                encode: encoder
+            }, {
+                field: "title",
+                tokenize: "forward",
+                encode: encoder
+            }, {
+                field: "tags",
+                tokenize: "forward",
+                encode: encoder
+            }
+        ]
+    });
+
+    posts.forEach((p, idx) => {
+        contentIndex.add({
+            id: idx, title: p.title, content: p.content, tags: p.tags
         });
-        return contentIndex;
-    }
+    });
+
+    return contentIndex;
+}
+
 
     async function init() {
         //init offline search index
