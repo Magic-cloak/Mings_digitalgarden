@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/使用docker搭建ubuntu环境下的iMRI可视化软件/","noteIcon":"","created":"2024-05-04T17:53:29.531+08:00","updated":"2024-05-04T17:55:38.274+08:00"}
+{"dg-publish":true,"permalink":"/使用docker搭建ubuntu环境下的iMRI可视化软件/","noteIcon":"","created":"2024-05-04T17:53:29.531+08:00","updated":"2024-05-04T17:57:48.528+08:00"}
 ---
 
 
@@ -7,7 +7,7 @@
 ## 开始的设想
 最开始的计划是使用docker装配仅能在ubuntu环境下使用的fsl软件的容器。
 但是这会导致不同操作系统下可能无法使用在win环境下编写的iMRI可视化程序。
-因此张一师兄提出，可不可以将先前在win下运行的可视化程序移植到linux下，和fsl一起打包成容器，完成对应操作时通过点击设计好的ui按钮，通过fsl完成对应功能（例如：MRI图像除去头皮颅骨、大脑分割为白质、灰质、脑脊液区），这样无论在linux、win、mac环境下都可以通过docker容器使用该软件。
+因此师兄提出，可不可以将先前在win下运行的可视化程序移植到linux下，和fsl一起打包成容器，完成对应操作时通过点击设计好的ui按钮，通过fsl完成对应功能（例如：MRI图像除去头皮颅骨、大脑分割为白质、灰质、脑脊液区），这样无论在linux、win、mac环境下都可以通过docker容器使用该软件。
 
 ## 第一次尝试
 第一次尝试是参考了csdn上的博客，安装好docker后，通过cmd命令
@@ -25,7 +25,7 @@ bet /shared_data/test.nii.gz /shared_data/test_out.nii.gz # 脱去头皮
 
 fast -s 1 -t 1 -n 3 -H 0.1 -I 4 -l 20.0 -o /shared_data/T1_image_test /shared_data/test_out.nii.gz # 分割脑区
 ```
-完成操作，输出操作后的文件。能够完成操作，但是没有整合在同一程序、环境中。这时候得知张一师兄希望将程序全部移植到docker容器中。
+完成操作，输出操作后的文件。能够完成操作，但是没有整合在同一程序、环境中。这时候得知师兄希望将程序全部移植到docker容器中。
 
 ## 第二次尝试
 第二次尝试打算利用第一次尝试已经安装好fsl的容器。
